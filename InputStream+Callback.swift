@@ -119,15 +119,19 @@ extension InputStream {
         /// Connect the tarReadStream to the tarWriteStream
         let bufSize = 512
         
-        self.on(event: .hasBytesAvailable) {
-            
-            let streamBuf: [UInt8] = Array(repeating: 0, count: bufSize)
+        func _pipe(byteCount: Int, from: InputStream, to: OutputStream) {
+            let streamBuf: [UInt8] = Array(repeating: 0, count: byteCount)
             let buf = UnsafeMutablePointer<UInt8>(mutating: streamBuf)
-            let bytesRead = self.read(buf, maxLength: bufSize)
+            let bytesRead = self.read(buf, maxLength: byteCount)
             
             writeStream.write(payload: Array(streamBuf[0 ..< bytesRead])) {
-                print("write done")
+                print("wrote \(bytesRead) bytes")
             }
+        }
+        
+        self.on(event: .hasBytesAvailable) {
+
+            _pipe(byteCount: bufSize, from: self, to: writeStream)
         }
         
         self.on(event: .endOfStream) {
