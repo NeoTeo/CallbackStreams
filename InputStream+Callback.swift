@@ -124,9 +124,7 @@ extension InputStream {
             let buf = UnsafeMutablePointer<UInt8>(mutating: streamBuf)
             let bytesRead = self.read(buf, maxLength: byteCount)
             
-            writeStream.write(payload: Array(streamBuf[0 ..< bytesRead])) {
-                print("wrote \(bytesRead) bytes")
-            }
+            writeStream.write(payload: Array(streamBuf[0 ..< bytesRead])) 
         }
         
         self.on(event: .hasBytesAvailable) {

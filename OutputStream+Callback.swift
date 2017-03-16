@@ -19,7 +19,8 @@ extension OutputStream {
     /// - Parameters:
     ///   - payload: the bytes to write on the outputstream
     ///   - completionHandler: the block to execute on completing the write of all bytes.
-    open func write(payload: [UInt8], completionHandler: @escaping VoidFunc) {
+    //open func write(payload: [UInt8], completionHandler: @escaping VoidFunc? = nil) {
+    open func write(payload: [UInt8], completionHandler: VoidFunc? = nil) {
         var data = payload
         
         while data.count > 0 {
@@ -45,7 +46,7 @@ extension OutputStream {
             }
         }
         
-        completionHandler()
+        completionHandler?()
     }
     
     /// This has to be an NSObject for the associatedObject stuff to work
